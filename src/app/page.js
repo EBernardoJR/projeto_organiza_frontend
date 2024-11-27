@@ -1,101 +1,140 @@
-import Image from "next/image";
+import Link from "next/link"; // Importação para navegação interna
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div
+      style={{
+        backgroundColor: "#f4f4f4", // Fundo neutro e claro
+        minHeight: "100vh",
+        paddingTop: "20px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        fontFamily: "'Roboto', sans-serif",
+      }}
+    >
+      {/* Cabeçalho */}
+      <header
+        style={{
+          background: "linear-gradient(90deg, #4CAF50, #2E7D32)",
+          color: "white",
+          width: "100%",
+          padding: "20px 0",
+          textAlign: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <h1 style={{ fontSize: "36px", margin: "0" }}>Organiza Investimentos</h1>
+        <p style={{ fontSize: "20px", margin: "5px 0" }}>
+          Transforme sua vida financeira com decisões inteligentes!
+        </p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Botões com navegação */}
+      <div style={{ display: "flex", gap: "20px", marginBottom: "40px" }}>
+        <Link href="/cadastro">
+          <button style={buttonStyle}>Cadastre-se</button>
+        </Link>
+        <Link href="/login">
+          <button style={buttonStyle}>Login</button>
+        </Link>
+      </div>
+
+      {/* Introdução */}
+      <section style={{ textAlign: "center", marginBottom: "40px", width: "80%" }}>
+        <h2 style={{ fontSize: "32px", color: "#333" }}>Bem-vindo ao Mundo dos Investimentos</h2>
+        <p style={{ fontSize: "20px", color: "#555", lineHeight: "1.8", marginBottom: "20px" }}>
+          Invista no seu futuro e alcance seus objetivos financeiros. Aqui, oferecemos ferramentas, conhecimento e estratégias para que você
+          possa começar sua jornada no universo dos investimentos com confiança.
+        </p>
+        <img
+          src="/banner.png"
+          alt="Banner de Investimentos"
+          style={{
+            width: "100%",
+            borderRadius: "12px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            marginBottom: "20px",
+          }}
+        />
+      </section>
+
+      {/* Destaques */}
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "20px",
+          marginBottom: "40px",
+          width: "80%",
+        }}
+      >
+        {highlights.map(({ image, title, description }, index) => (
+          <div
+            key={index}
+            style={{
+              backgroundColor: "#FFFFFF",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              textAlign: "center",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <img src={image} alt={title} style={{ width: "150px", marginBottom: "15px" }} />
+            <h3 style={{ color: "#4CAF50", marginBottom: "10px" }}>{title}</h3>
+            <p style={{ color: "#555" }}>{description}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* Gráfico */}
+      <section style={{ textAlign: "center", marginBottom: "40px", width: "80%" }}>
+        <h2 style={{ fontSize: "28px", color: "#333", marginBottom: "20px" }}>Evolução Financeira</h2>
+        <img
+          src="/grafico.png"
+          alt="Gráfico de Investimentos"
+          style={{
+            width: "100%",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        />
+        <p style={{ textAlign: "center", marginTop: "10px", color: "#777" }}>
+          Visualize como seu dinheiro pode crescer com planejamento e disciplina.
+        </p>
+      </section>
     </div>
   );
 }
+
+// Estilo do botão
+const buttonStyle = {
+  padding: "15px 30px",
+  backgroundColor: "#4CAF50",
+  color: "white",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
+  fontWeight: "bold",
+  fontSize: "16px",
+};
+
+// Conteúdo dos destaques
+const highlights = [
+  {
+    image: "/estrategia3.png",
+    title: "Estratégias Inteligentes",
+    description: "Descubra como planejar seus investimentos para maximizar seus rendimentos.",
+  },
+  {
+    image: "/seguro.png",
+    title: "Segurança",
+    description: "Entenda como proteger seu capital e investir com confiança.",
+  },
+  {
+    image: "/crescimento2.png",
+    title: "Crescimento",
+    description: "Aprenda a multiplicar seu patrimônio ao longo do tempo com retornos consistentes.",
+  },
+];
