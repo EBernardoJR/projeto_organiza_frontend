@@ -1,101 +1,109 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [categorias, setCategorias] = useState([
+    { nome: "Alimentação", orcamento: 500, gasto: 450 },
+    { nome: "Aluguel", orcamento: 1200, gasto: 1200 },
+    { nome: "Entretenimento", orcamento: 300, gasto: 400 },
+  ]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const [novaCategoria, setNovaCategoria] = useState({ nome: "", orcamento: 0, gasto: 0 });
+
+  const adicionarCategoria = () => {
+    if (novaCategoria.nome && novaCategoria.orcamento > 0) {
+      setCategorias([...categorias, novaCategoria]);
+      setNovaCategoria({ nome: "", orcamento: 0, gasto: 0 });
+    }
+  };
+
+  const excluirCategoria = (nomeCategoria) => {
+    setCategorias(categorias.filter((categoria) => categoria.nome !== nomeCategoria));
+  };
+
+  const dados = {
+    labels: categorias.map((c) => c.nome),
+    datasets: [
+      {
+        label: "Orçamento",
+        data: categorias.map((c) => c.orcamento),
+        backgroundColor: "rgba(102, 194, 164, 0.6)", // #66C2A4 (verde suave)
+      },
+      {
+        label: "Gasto",
+        data: categorias.map((c) => c.gasto),
+        backgroundColor: "rgba(229, 115, 115, 0.6)", // #E57373 (vermelho suave)
+      },
+    ],
+  };
+
+  const opcoes = {
+    responsive: true,
+    plugins: {
+      legend: { position: "top" },
+      title: { display: true, text: "Orçamento vs. Gasto" },
+    },
+  };
+
+  return (
+    <div className="min-h-screen p-8 flex flex-col items-center gap-8 bg-white">
+      <h1 className="text-2xl font-bold text-[#008259]">Controle de Orçamento</h1>
+
+      {/* Formulário para adicionar categorias */}
+      <div className="flex flex-col gap-4 w-full max-w-md bg-white p-6 shadow-lg rounded-lg">
+        <input
+          type="text"
+          placeholder="Nome da Categoria"
+          value={novaCategoria.nome}
+          onChange={(e) => setNovaCategoria({ ...novaCategoria, nome: e.target.value })}
+          className="border p-2 rounded bg-[#f1f7f5]"
+        />
+        <input
+          type="number"
+          placeholder="Valor Orçado"
+          value={novaCategoria.orcamento}
+          onChange={(e) => setNovaCategoria({ ...novaCategoria, orcamento: Number(e.target.value) })}
+          className="border p-2 rounded bg-[#f1f7f5]"
+        />
+        <input
+          type="number"
+          placeholder="Valor Gasto"
+          value={novaCategoria.gasto}
+          onChange={(e) => setNovaCategoria({ ...novaCategoria, gasto: Number(e.target.value) })}
+          className="border p-2 rounded bg-[#f1f7f5]"
+        />
+        <button
+          onClick={adicionarCategoria}
+          className="bg-[#00986c] text-white py-2 px-4 rounded hover:bg-[#2ca880]"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Adicionar Categoria
+        </button>
+      </div>
+
+      {/* Exibir Categorias e Botão Excluir */}
+      <div className="w-full max-w-md mt-8">
+        {categorias.map((categoria, index) => (
+          <div key={index} className="flex items-center justify-between p-2 border-b bg-white shadow-sm rounded-lg">
+            <span className="text-[#008d62]">{categoria.nome} - Orçado: R${categoria.orcamento} - Gasto: R${categoria.gasto}</span>
+            <button
+              onClick={() => excluirCategoria(categoria.nome)}
+              className="text-[#2ca880] hover:text-[#008259]"
+            >
+              Excluir
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Gráfico de Barras */}
+      <div className="w-full max-w-3xl mt-8">
+        <Bar data={dados} options={opcoes} />
+      </div>
     </div>
   );
 }
