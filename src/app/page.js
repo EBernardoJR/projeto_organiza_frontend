@@ -1,215 +1,140 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from "next/link"; // Importação para navegação interna
 
 export default function Home() {
-  const [transactions, setTransactions] = useState([]) 
-  // Lista de registros (receitas/despesas)
-  const [form, setForm] = useState({ type: 'income', value: '', description: '', date: '' }) 
-  // Estado do formulário
-  const router = useRouter() // Inicializa o hook useRouter
-
-  // Carrega as transações do localStorage ao montar o componente
-  useEffect(() => {
-    const savedTransactions = JSON.parse(localStorage.getItem('transactions')) || []
-    setTransactions(savedTransactions)
-  }, [])
-
-  // Função para adicionar ou editar uma transação
-  const addTransaction = (e) => {
-    e.preventDefault()
-    if (!form.value || !form.description || !form.date) {
-      alert('Todos os campos são obrigatórios')
-      return
-    }
-
-    const newTransaction = {
-      ...form,
-      value: parseFloat(form.value),
-      id: Date.now(),
-    }
-
-    const updatedTransactions = form.id
-      ? transactions.map((transaction) => (transaction.id === form.id ? newTransaction : transaction))
-      : [...transactions, newTransaction]
-
-    setTransactions(updatedTransactions)
-
-    localStorage.setItem('transactions', JSON.stringify(updatedTransactions))
-
-    setForm({ type: 'income', value: '', description: '', date: '' })
-  }
-
-  // Função para editar uma transação
-  const editTransaction = (id) => {
-    const transactionToEdit = transactions.find((transaction) => transaction.id === id)
-    setForm(transactionToEdit)
-  }
-
-  // Função para excluir uma transação
-  const deleteTransaction = (id) => {
-    const updatedTransactions = transactions.filter((transaction) => transaction.id !== id)
-    setTransactions(updatedTransactions)
-    localStorage.setItem('transactions', JSON.stringify(updatedTransactions))
-  }
-
-  // Função para voltar para a página anterior
-  const goBack = () => {
-    router.back()
-  }
-
-  // Calcular o de receitas e despesas
-  const calculateTotal = (type) => {
-    return transactions
-      .filter((transaction) => transaction.type === type)
-      .reduce((acc, curr) => acc + curr.value, 0)
-      .toFixed(2)
-  }
-
   return (
-    <div className="h-screen mx-auto p-5 bg-gray-100 flex flex-col justify-start font-inter">
+    <div
+      style={{
+        backgroundColor: "#f4f4f4", // Fundo neutro e claro
+        minHeight: "100vh",
+        paddingTop: "20px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        fontFamily: "'Roboto', sans-serif",
+      }}
+    >
       {/* Cabeçalho */}
-      <div className="header flex justify-between items-center bg-white p-4 rounded-md shadow-lg mb-6">
-        <div className="flex items-center">
-          <button
-            onClick={goBack}
-            className="text-gray-700 hover:text-gray-900 mr-4"
-            aria-label="Voltar"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <h1 className="text-2xl font-semibold text-gray-700">Olá, seja bem-vindo(a) (Nome)</h1>
-        </div>
-        <div>
-          <span className="text-sm text-gray-500">ao Organize Investimentos!</span>
-        </div>
+      <header
+        style={{
+          background: "linear-gradient(90deg, #4CAF50, #2E7D32)",
+          color: "white",
+          width: "100%",
+          padding: "20px 0",
+          textAlign: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <h1 style={{ fontSize: "36px", margin: "0" }}>Organiza Investimentos</h1>
+        <p style={{ fontSize: "20px", margin: "5px 0" }}>
+          Transforme sua vida financeira com decisões inteligentes!
+        </p>
+      </header>
+
+      {/* Botões com navegação */}
+      <div style={{ display: "flex", gap: "20px", marginBottom: "40px" }}>
+        <Link href="/cadastro">
+          <button style={buttonStyle}>Cadastre-se</button>
+        </Link>
+        <Link href="/login">
+          <button style={buttonStyle}>Login</button>
+        </Link>
       </div>
 
-     {/* Seção de receitas e despesas */}
-<div className="financials flex justify-between mb-6">
-  <div className="flex flex-col items-center w-1/2">
-    <p className="text-green-500 text-xl">Receita mensal</p> 
-    <p className="text-3xl font-bold text-gray-700">R$ {calculateTotal('income')}</p> 
-  </div>
-  <div className="flex flex-col items-center w-1/2">
-    <p className="text-red-500 text-xl">Despesa mensal</p> 
-    <p className="text-3xl font-bold text-gray-700">R$ {calculateTotal('expense')}</p> 
-  </div>
-</div>
+      {/* Introdução */}
+      <section style={{ textAlign: "center", marginBottom: "40px", width: "80%" }}>
+        <h2 style={{ fontSize: "32px", color: "#333" }}>Bem-vindo ao Mundo dos Investimentos</h2>
+        <p style={{ fontSize: "20px", color: "#555", lineHeight: "1.8", marginBottom: "20px" }}>
+          Invista no seu futuro e alcance seus objetivos financeiros. Aqui, oferecemos ferramentas, conhecimento e estratégias para que você
+          possa começar sua jornada no universo dos investimentos com confiança.
+        </p>
+        <img
+          src="/banner.png"
+          alt="Banner de Investimentos"
+          style={{
+            width: "100%",
+            borderRadius: "12px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            marginBottom: "20px",
+          }}
+        />
+      </section>
 
-      
-      {/* Formulário de transações */}
-      <form onSubmit={addTransaction} className="transaction-form mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col">
-          <label className="block text-lg text-gray-700 font-semibold">Tipo de Transação</label>
-          <select
-            className="w-full bg-[#E1DEDE] text-gray-700 p-2 border border-gray-300 rounded-md"
-            value={form.type}
-            onChange={(e) => setForm({ ...form, type: e.target.value })}
-            disabled={!!form.id}
+      {/* Destaques */}
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "20px",
+          marginBottom: "40px",
+          width: "80%",
+        }}
+      >
+        {highlights.map(({ image, title, description }, index) => (
+          <div
+            key={index}
+            style={{
+              backgroundColor: "#FFFFFF",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              textAlign: "center",
+            }}
           >
-            <option value="income">Receita</option>
-            <option value="expense">Despesa</option>
-          </select>
-        </div>
+            <img src={image} alt={title} style={{ width: "150px", marginBottom: "15px" }} />
+            <h3 style={{ color: "#4CAF50", marginBottom: "10px" }}>{title}</h3>
+            <p style={{ color: "#555" }}>{description}</p>
+          </div>
+        ))}
+      </section>
 
-        <div className="flex flex-col">
-          <label className="block text-lg text-gray-700 font-semibold">Valor</label>
-          <input
-            type="number"
-            className="bg-[#E1DEDE] text-gray-700 w-full p-2 border border-gray-300 rounded-md"
-            value={form.value}
-            onChange={(e) => setForm({ ...form, value: e.target.value })}
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-gray-700 block text-lg font-semibold">Descrição</label>
-          <input
-            type="text"
-            className="bg-[#E1DEDE] text-gray-700 w-full p-2 border border-gray-300 rounded-md"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-gray-700 block text-lg font-semibold">Data</label>
-          <input
-            type="date"
-            className="bg-[#E1DEDE] text-gray-700 w-full p-2 border border-gray-300 rounded-md"
-            value={form.date}
-            onChange={(e) => setForm({ ...form, date: e.target.value })}
-            required
-          />
-        </div>
-
-        <div className="col-span-2 flex justify-center">
-          <button
-            type="submit"
-            className="w-full md:w-auto p-3 bg-gradient-to-r from-[#4CAF50] to-[#2E7D32] text-white font-semibold rounded-md"
-          >
-            {form.id ? 'Editar Registro' : 'Adicionar Registro'}
-          </button>
-        </div>
-      </form>
-
-      {/* Lista de transações */}
-      <div className=" transactions mt-8">
-        <h2 className="text-xl text-gray-700 font-semibold mb-4">Lista de Registros</h2>
-        <ul className="space-y-4 ">
-          {transactions.map((transaction) => (
-            <li
-              key={transaction.id}
-              className="flex justify-between items-center bg-white p-4 rounded-md shadow-md"
-            >
-              <div>
-                <p className="font-semibold text-gray-500">{transaction.description}</p>
-                <p className="text-sm text-gray-500">{transaction.date}</p>
-              </div>
-              <div>
-                <span
-                  className={`font-bold ${
-                    transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                  }`}
-                >
-                  R$ {transaction.value.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => editTransaction(transaction.id)}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => deleteTransaction(transaction.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  Excluir
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Gráfico */}
+      <section style={{ textAlign: "center", marginBottom: "40px", width: "80%" }}>
+        <h2 style={{ fontSize: "28px", color: "#333", marginBottom: "20px" }}>Evolução Financeira</h2>
+        <img
+          src="/grafico.png"
+          alt="Gráfico de Investimentos"
+          style={{
+            width: "100%",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        />
+        <p style={{ textAlign: "center", marginTop: "10px", color: "#777" }}>
+          Visualize como seu dinheiro pode crescer com planejamento e disciplina.
+        </p>
+      </section>
     </div>
-  )
+  );
 }
+
+// Estilo do botão
+const buttonStyle = {
+  padding: "15px 30px",
+  backgroundColor: "#4CAF50",
+  color: "white",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
+  fontWeight: "bold",
+  fontSize: "16px",
+};
+
+// Conteúdo dos destaques
+const highlights = [
+  {
+    image: "/estrategia3.png",
+    title: "Estratégias Inteligentes",
+    description: "Descubra como planejar seus investimentos para maximizar seus rendimentos.",
+  },
+  {
+    image: "/seguro.png",
+    title: "Segurança",
+    description: "Entenda como proteger seu capital e investir com confiança.",
+  },
+  {
+    image: "/crescimento2.png",
+    title: "Crescimento",
+    description: "Aprenda a multiplicar seu patrimônio ao longo do tempo com retornos consistentes.",
+  },
+];
