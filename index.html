@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Investimentos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gerenciador de Investimentos</h1>
+    </header>
+    <main>
+        <section class="form-section">
+            <h2>Adicionar Investimento</h2>
+            <form id="investment-form">
+                <label for="investment-name">Nome do Investimento:</label>
+                <input type="text" id="investment-name" name="investment-name" placeholder="Ex.: Ações XYZ" required>
+
+                <label for="investment-amount">Valor Investido (R$):</label>
+                <input type="number" id="investment-amount" name="investment-amount" placeholder="Ex.: 1000" required>
+
+                <label for="investment-earnings">Ganho Obtido (R$):</label>
+                <input type="number" id="investment-earnings" name="investment-earnings" placeholder="Ex.: 200" required>
+
+                <button type="submit">Adicionar</button>
+            </form>
+        </section>
+        <section class="investment-list">
+            <h2>Lista de Investimentos</h2>
+            <ul id="investment-list">
+                <!-- Os investimentos aparecerão aqui -->
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>Gerenciador de Investimentos © 2024</p>
+    </footer>
+    <script src="scripts.js"></script>
+</body>
+</html>
