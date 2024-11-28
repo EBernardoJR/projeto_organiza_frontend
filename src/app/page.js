@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div
       style={{
-        backgroundColor: "#f4f4f4", // Fundo neutro e claro
+        backgroundColor: "#f4f4f4", 
         minHeight: "100vh",
         paddingTop: "20px",
         display: "flex",
